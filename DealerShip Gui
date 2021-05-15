@@ -1,0 +1,77 @@
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(
+    function()
+        vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    end
+)
+
+function GetMyCar()
+    for i, v in pairs(game:GetService("Workspace").Cars:GetDescendants()) do
+        if v.Name == "Owner" then
+            if v.Value == game.Players.LocalPlayer.Name then
+                return v.Parent.Parent
+            end
+        end
+    end
+end
+local mycar = GetMyCar()
+local function StartFarm()
+    pcall(
+        function()
+            for i, v in pairs(mycar:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CFrame = CFrame.new(1000, 625, 600)
+                    game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                    game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                    game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                    game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                    game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                end
+            end
+        end
+    )
+end
+
+local library = loadstring(game:HttpGet(("https://raw.githubusercontent.com/AikaV3rm/UiLib/master/Lib.lua")))()
+
+local w = library:CreateWindow("CarDealerShipTycoon") -- Creates the window
+
+local b = w:CreateFolder("Main") -- Creates the folder(U will put here your buttons,etc)
+
+getgenv().CarFarm = false
+
+b:Toggle(
+    "Auto Car Farm",
+    function(bool)
+        getgenv().CarFarm = bool
+        if bool then
+            Farm()
+        end
+    end
+)
+b:Label(
+    "Made By:efeeee#8151",
+    {
+        TextSize = 13, -- Self Explaining
+        TextColor = Color3.fromRGB(255, 255, 255), -- Self Explaining
+        BgColor = Color3.fromRGB(35, 35, 35) -- Self Explaining
+    }
+)
+
+function Farm()
+    spawn(
+        function()
+            while getgenv().CarFarm == true do
+                StartFarm()
+                wait(1)
+                game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+                wait(10)
+                game:GetService("Players").LocalPlayer.PlayerScripts.Controls.SetThrottle:Fire(1)
+            end
+        end
+    )
+end
+
+b:DestroyGui()
